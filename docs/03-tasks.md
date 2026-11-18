@@ -29,7 +29,7 @@ Fill in real dates once you know the start date:
 
 ## Phase 0 – Foundation (Week 1)
 
-No feature code this week. We agree on the plan.
+> **Change:** In Week 1 the whole team builds the Projects page together (W1-01, W1-02, W1-03). See [Week 1 plan](tasks/week-1/README.md). The lead does the setup tasks below. P0-04 and P0-06 move to Week 2.
 
 | ID | Task | Owner | Due | Done when |
 |----|------|-------|-----|-----------|

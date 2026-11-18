@@ -1,12 +1,20 @@
-import ModulePlaceholder from '../../shared/ModulePlaceholder.jsx';
+import { Routes, Route } from 'react-router-dom';
+import ProjectListPage from './pages/ProjectListPage.jsx';
+import ProjectDetailPage from './pages/ProjectDetailPage.jsx';
+import ProjectFormPage from './pages/ProjectFormPage.jsx';
 
-export default function ProjectsPage() {
+// Projects module routes (all under /projects).
+//   /projects            -> list         (Samuel)
+//   /projects/new        -> create form  (Righteous)
+//   /projects/:id        -> detail       (Tega)
+//   /projects/:id/edit   -> edit form    (Righteous)
+export default function ProjectsModule() {
   return (
-    <ModulePlaceholder
-      code="M1"
-      name="Projects"
-      owner="Engineer A (Lead)"
-      description="Create, list and open projects. Publish delivered projects as case studies."
-    />
+    <Routes>
+      <Route index element={<ProjectListPage />} />
+      <Route path="new" element={<ProjectFormPage />} />
+      <Route path=":id" element={<ProjectDetailPage />} />
+      <Route path=":id/edit" element={<ProjectFormPage />} />
+    </Routes>
   );
 }
