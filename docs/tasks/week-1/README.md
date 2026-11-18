@@ -24,11 +24,11 @@ The Projects page has 3 parts. Each person owns one part.
          TEGA  W1-02          click "Edit"
 ```
 
-| Person | Task | Page | Branch |
-|--------|------|------|--------|
-| Samuel | [W1-01 Project List](W1-01-project-list.md) | `/projects` | `W1-01-project-list` |
-| Tega | [W1-02 Project Detail](W1-02-project-detail.md) | `/projects/:id` | `W1-02-project-detail` |
-| Righteous | [W1-03 Project Form](W1-03-project-form.md) | `/projects/new` and `/projects/:id/edit` | `W1-03-project-form` |
+| Person | Task file (read this) | Page | Branch to create |
+|--------|-------------------------|------|------------------|
+| Samuel | [W1-01 Project List](W1-01-samuel-project-list.md) | `/projects` | `samuel/W1-01-project-list` |
+| Tega | [W1-02 Project Detail](W1-02-tega-project-detail.md) | `/projects/:id` | `tega/W1-02-project-detail` |
+| Righteous | [W1-03 Project Form](W1-03-righteous-project-form.md) | `/projects/new` and `/projects/:id/edit` | `righteous/W1-03-project-form` |
 
 ## Why you must work together
 
@@ -96,14 +96,28 @@ The lead does the final review and merges.
 **Question for the team:**
 ```
 
-## How each person's PR works
+## How to start your task
 
-The lead has already created your branch, with your task file inside. Your PR is your task.
+1. Get the latest code:
+   ```
+   git checkout main
+   git pull
+   ```
+2. Create your branch (the name is at the top of your task file):
+   ```
+   git checkout -b samuel/W1-01-project-list
+   ```
+3. Do the work. Write your answers in **your own task file** and tick the boxes as you go.
+4. Commit and push:
+   ```
+   git add .
+   git commit -m "W1-01: add user flow and sketch"
+   git push -u origin samuel/W1-01-project-list
+   ```
+5. On GitHub, open a **draft pull request** from your branch. Title: `[W1-0X] Your page – Your name`. Push often; the PR updates by itself.
+6. When every box in your task file is ticked, click **"Ready for review"**.
 
-1. `git fetch` then `git checkout W1-0X-your-branch`
-2. Do the work, commit, and `git push`. Your PR updates by itself.
-3. Tick the boxes in your task file as you go.
-4. When everything is ticked, click **"Ready for review"** on the PR.
+More help: [How we work on GitHub](../../04-how-we-work-on-github.md)
 
 ## Done when (whole team)
 

@@ -1,4 +1,4 @@
-// OWNER: Tega – task W1-02. See docs/tasks/week-1/W1-02-project-detail.md
+// OWNER: Tega – task W1-02. See docs/tasks/week-1/W1-02-tega-project-detail.md
 import { useParams, Link } from 'react-router-dom';
 
 export default function ProjectDetailPage() {

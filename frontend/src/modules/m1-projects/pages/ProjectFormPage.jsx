@@ -1,4 +1,4 @@
-// OWNER: Righteous – task W1-03. See docs/tasks/week-1/W1-03-project-form.md
+// OWNER: Righteous – task W1-03. See docs/tasks/week-1/W1-03-righteous-project-form.md
 import { useParams, Link } from 'react-router-dom';
 
 export default function ProjectFormPage() {

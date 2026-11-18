@@ -1,4 +1,4 @@
-// OWNER: Samuel – task W1-01. See docs/tasks/week-1/W1-01-project-list.md
+// OWNER: Samuel – task W1-01. See docs/tasks/week-1/W1-01-samuel-project-list.md
 import { Link } from 'react-router-dom';
 
 export default function ProjectListPage() {
