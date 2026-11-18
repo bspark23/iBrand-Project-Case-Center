@@ -1,0 +1,667 @@
+openapi: 3.0.3
+info:
+  title: IPCC API
+  version: 0.1.0
+  description: |
+    iBrand Project & Case Center API contract.
+    Status: DRAFT until end of Week 1 (task P0-07). Endpoints marked PROPOSED
+    come from the open questions in docs/06-api-contract.md and need team sign-off.
+servers:
+  - url: http://localhost:4000
+tags:
+  - name: Health
+  - name: Auth
+  - name: Clients
+  - name: Projects
+  - name: Tasks
+  - name: Equipment
+  - name: Media
+  - name: Public
+  - name: Share links
+
+security:
+  - bearerAuth: []
+
+paths:
+  /api/health:
+    get:
+      tags: [Health]
+      summary: Server is up
+      security: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string, example: ok }
+                  service: { type: string }
+                  time: { type: string, format: date-time }
+
+  # ---------- Auth (M1) ----------
+  /api/auth/register:
+    post:
+      tags: [Auth]
+      summary: Create a user (admin only)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RegisterInput' }
+      responses:
+        '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/User' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /api/auth/login:
+    post:
+      tags: [Auth]
+      summary: Log in and get a token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+      responses:
+        '200':
+          description: Logged in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: { type: string }
+                  user: { $ref: '#/components/schemas/User' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /api/auth/me:
+    get:
+      tags: [Auth]
+      summary: Current user
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/User' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  # ---------- Clients (M1) ----------
+  /api/clients:
+    get:
+      tags: [Clients]
+      summary: List clients (staff, admin)
+      responses:
+        '200':
+          description: OK
+          content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Client' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+    post:
+      tags: [Clients]
+      summary: Create client (staff, admin)
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/ClientInput' } } }
+      responses:
+        '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/Client' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/clients/{id}:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    patch:
+      tags: [Clients]
+      summary: Update client (staff, admin)
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/ClientInput' } } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Client' } } } }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  # ---------- Projects (M1) ----------
+  /api/projects:
+    get:
+      tags: [Projects]
+      summary: List projects (staff, admin; interns see only assigned)
+      parameters:
+        - { name: status, in: query, schema: { $ref: '#/components/schemas/ProjectStatus' } }
+        - { name: client_id, in: query, schema: { type: string, format: uuid } }
+      responses:
+        '200':
+          description: OK
+          content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Project' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [Projects]
+      summary: Create project (staff, admin)
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/ProjectInput' } } }
+      responses:
+        '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/Project' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/projects/{id}:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    get:
+      tags: [Projects]
+      summary: Project detail (staff, admin, assigned intern)
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Project' } } } }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      tags: [Projects]
+      summary: Update project (staff, admin)
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/ProjectInput' } } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Project' } } } }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /api/projects/{id}/publish:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    post:
+      tags: [Projects]
+      summary: Publish as case (staff, admin). Project status must be delivered.
+      responses:
+        '200': { description: Published, content: { application/json: { schema: { $ref: '#/components/schemas/Project' } } } }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /api/projects/{id}/unpublish:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    post:
+      tags: [Projects]
+      summary: Remove from case library (admin)
+      responses:
+        '200': { description: Unpublished, content: { application/json: { schema: { $ref: '#/components/schemas/Project' } } } }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  # ---------- Tasks (M2) ----------
+  /api/projects/{id}/tasks:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    get:
+      tags: [Tasks]
+      summary: List tasks (staff, admin, assigned intern)
+      responses:
+        '200':
+          description: OK
+          content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Task' } } } }
+        '403': { $ref: '#/components/responses/Forbidden' }
+    post:
+      tags: [Tasks]
+      summary: Create task (staff, admin)
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/TaskInput' } } }
+      responses:
+        '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/Task' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/tasks/{id}:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    patch:
+      tags: [Tasks]
+      summary: Update task (assignee, staff, admin). Assignee may change status and position only.
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/TaskInput' } } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Task' } } } }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Tasks]
+      summary: Delete task (staff, admin)
+      responses:
+        '204': { description: Deleted }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  # ---------- Equipment (M3) ----------
+  /api/projects/{id}/equipment:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    get:
+      tags: [Equipment]
+      summary: List equipment (staff, admin)
+      responses:
+        '200':
+          description: OK
+          content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Equipment' } } } }
+        '403': { $ref: '#/components/responses/Forbidden' }
+    post:
+      tags: [Equipment]
+      summary: Add item (staff, admin)
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/EquipmentInput' } } }
+      responses:
+        '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/Equipment' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/equipment/{id}:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    patch:
+      tags: [Equipment]
+      summary: Update or tick item (staff, admin)
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/EquipmentInput' } } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Equipment' } } } }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Equipment]
+      summary: PROPOSED – Delete item (staff, admin)
+      responses:
+        '204': { description: Deleted }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /api/projects/{id}/equipment/export:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    get:
+      tags: [Equipment]
+      summary: Download equipment list as PDF (staff, admin)
+      responses:
+        '200':
+          description: PDF file
+          content: { application/pdf: { schema: { type: string, format: binary } } }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  # ---------- Media (M4) ----------
+  /api/projects/{id}/media:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    get:
+      tags: [Media]
+      summary: List media (staff, admin, assigned intern)
+      parameters:
+        - { name: media_type, in: query, schema: { $ref: '#/components/schemas/MediaType' } }
+        - { name: tag, in: query, schema: { type: string } }
+      responses:
+        '200':
+          description: OK
+          content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Media' } } } }
+        '403': { $ref: '#/components/responses/Forbidden' }
+    post:
+      tags: [Media]
+      summary: Upload file (staff, admin, intern)
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file: { type: string, format: binary }
+                tags: { type: string, description: Comma-separated tags }
+      responses:
+        '201': { description: Uploaded, content: { application/json: { schema: { $ref: '#/components/schemas/Media' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '413': { description: File too large, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+  /api/media/{id}:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    delete:
+      tags: [Media]
+      summary: Delete media (staff, admin)
+      responses:
+        '204': { description: Deleted }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  # ---------- Public case library (M5) ----------
+  /api/public/cases:
+    get:
+      tags: [Public]
+      summary: List published cases
+      security: []
+      parameters:
+        - { name: client_id, in: query, schema: { type: string, format: uuid } }
+        - { name: type, in: query, schema: { $ref: '#/components/schemas/ProjectType' } }
+        - { name: q, in: query, description: Keyword search, schema: { type: string } }
+      responses:
+        '200':
+          description: OK
+          content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/PublicCase' } } } }
+  /api/public/cases/{id}:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    get:
+      tags: [Public]
+      summary: Case detail
+      security: []
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/PublicCaseDetail' } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  # ---------- Share links (M6, M7) ----------
+  /api/share-links:
+    get:
+      tags: [Share links]
+      summary: PROPOSED – List share links I created (staff, admin)
+      responses:
+        '200':
+          description: OK
+          content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/ShareLink' } } } }
+        '403': { $ref: '#/components/responses/Forbidden' }
+    post:
+      tags: [Share links]
+      summary: Create share link (staff, admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [target_type, target_id]
+              properties:
+                target_type: { $ref: '#/components/schemas/ShareTargetType' }
+                target_id: { type: string, format: uuid }
+                password: { type: string, nullable: true }
+                expires_at: { type: string, format: date-time, nullable: true }
+      responses:
+        '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/ShareLink' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/share-links/{id}:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    delete:
+      tags: [Share links]
+      summary: PROPOSED – Delete share link (staff, admin)
+      responses:
+        '204': { description: Deleted }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /api/shared/{token}:
+    parameters: [ { $ref: '#/components/parameters/Token' } ]
+    get:
+      tags: [Share links]
+      summary: Check a share link. Tells the page if a password is needed.
+      security: []
+      responses:
+        '200':
+          description: Link is valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  target_type: { $ref: '#/components/schemas/ShareTargetType' }
+                  requires_password: { type: boolean }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '410': { description: Link expired, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+  /api/shared/{token}/unlock:
+    parameters: [ { $ref: '#/components/parameters/Token' } ]
+    post:
+      tags: [Share links]
+      summary: PROPOSED – Send the password for a protected link, get a short-lived access token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [password]
+              properties:
+                password: { type: string }
+      responses:
+        '200':
+          description: Unlocked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token: { type: string }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '410': { description: Link expired, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+  /api/shared/{token}/project:
+    parameters: [ { $ref: '#/components/parameters/Token' } ]
+    get:
+      tags: [Share links]
+      summary: Read-only project progress (no tasks, equipment or notes)
+      security: []
+      parameters:
+        - { name: X-Share-Access, in: header, required: false, description: Access token from /unlock if the link has a password, schema: { type: string } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/ClientProjectView' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '410': { description: Link expired, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    Token:
+      name: token
+      in: path
+      required: true
+      schema: { type: string }
+
+  responses:
+    BadRequest:
+      description: Invalid input
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    Unauthorized:
+      description: Not logged in or wrong credentials
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    Forbidden:
+      description: Logged in but not allowed
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    NotFound:
+      description: Not found
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    Conflict:
+      description: Conflicts with current state
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code: { type: string, example: FORBIDDEN }
+            message: { type: string, example: You do not have access to this project. }
+
+    Role: { type: string, enum: [intern, staff, admin, client] }
+    ProjectType: { type: string, enum: [event, livestream, brand_film, documentary] }
+    ProjectStatus: { type: string, enum: [planning, active, delivered, archived] }
+    TaskStatus: { type: string, enum: [todo, in_progress, done] }
+    MediaType: { type: string, enum: [image, video, document] }
+    ShareTargetType: { type: string, enum: [project, client, case] }
+
+    BrandColors:
+      type: object
+      properties:
+        primary: { type: string, example: '#E30613' }
+        secondary: { type: string, example: '#111111' }
+
+    User:
+      type: object
+      description: password_hash is never returned.
+      properties:
+        id: { type: string, format: uuid }
+        email: { type: string, format: email }
+        display_name: { type: string }
+        role: { $ref: '#/components/schemas/Role' }
+        created_at: { type: string, format: date-time }
+    RegisterInput:
+      type: object
+      required: [email, password, display_name, role]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string, minLength: 8 }
+        display_name: { type: string }
+        role: { $ref: '#/components/schemas/Role' }
+
+    Client:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        logo_url: { type: string }
+        brand_colors: { $ref: '#/components/schemas/BrandColors' }
+        created_at: { type: string, format: date-time }
+    ClientInput:
+      type: object
+      properties:
+        name: { type: string }
+        logo_url: { type: string }
+        brand_colors: { $ref: '#/components/schemas/BrandColors' }
+
+    Project:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        client_id: { type: string, format: uuid }
+        title: { type: string }
+        type: { $ref: '#/components/schemas/ProjectType' }
+        status: { $ref: '#/components/schemas/ProjectStatus' }
+        start_date: { type: string, format: date }
+        end_date: { type: string, format: date }
+        is_published: { type: boolean }
+        published_at: { type: string, format: date-time, nullable: true }
+        created_by: { type: string, format: uuid }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+    ProjectInput:
+      type: object
+      properties:
+        client_id: { type: string, format: uuid }
+        title: { type: string }
+        type: { $ref: '#/components/schemas/ProjectType' }
+        status: { $ref: '#/components/schemas/ProjectStatus' }
+        start_date: { type: string, format: date }
+        end_date: { type: string, format: date }
+
+    Task:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        project_id: { type: string, format: uuid }
+        assignee_id: { type: string, format: uuid }
+        title: { type: string }
+        status: { $ref: '#/components/schemas/TaskStatus' }
+        due_date: { type: string, format: date }
+        position: { type: integer }
+    TaskInput:
+      type: object
+      properties:
+        assignee_id: { type: string, format: uuid }
+        title: { type: string }
+        status: { $ref: '#/components/schemas/TaskStatus' }
+        due_date: { type: string, format: date }
+        position: { type: integer }
+
+    Equipment:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        project_id: { type: string, format: uuid }
+        item_name: { type: string }
+        quantity: { type: integer, minimum: 1 }
+        checked: { type: boolean }
+        notes: { type: string }
+    EquipmentInput:
+      type: object
+      properties:
+        item_name: { type: string }
+        quantity: { type: integer, minimum: 1 }
+        checked: { type: boolean }
+        notes: { type: string }
+
+    Media:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        project_id: { type: string, format: uuid }
+        file_url: { type: string }
+        media_type: { $ref: '#/components/schemas/MediaType' }
+        tags: { type: array, items: { type: string } }
+        thumbnail_url: { type: string }
+        uploaded_by: { type: string, format: uuid }
+        created_at: { type: string, format: date-time }
+
+    PublicCase:
+      type: object
+      description: Safe public view of a published project. No internal fields.
+      properties:
+        id: { type: string, format: uuid }
+        title: { type: string }
+        type: { $ref: '#/components/schemas/ProjectType' }
+        client:
+          type: object
+          properties:
+            id: { type: string, format: uuid }
+            name: { type: string }
+            logo_url: { type: string }
+            brand_colors: { $ref: '#/components/schemas/BrandColors' }
+        cover_url: { type: string, nullable: true }
+        published_at: { type: string, format: date-time }
+    PublicCaseDetail:
+      allOf:
+        - $ref: '#/components/schemas/PublicCase'
+        - type: object
+          properties:
+            start_date: { type: string, format: date }
+            end_date: { type: string, format: date }
+            media:
+              type: array
+              items:
+                type: object
+                properties:
+                  id: { type: string, format: uuid }
+                  file_url: { type: string }
+                  thumbnail_url: { type: string }
+                  media_type: { $ref: '#/components/schemas/MediaType' }
+
+    ShareLink:
+      type: object
+      description: password_hash is never returned.
+      properties:
+        id: { type: string, format: uuid }
+        target_type: { $ref: '#/components/schemas/ShareTargetType' }
+        target_id: { type: string, format: uuid }
+        token: { type: string }
+        has_password: { type: boolean }
+        expires_at: { type: string, format: date-time, nullable: true }
+        created_by: { type: string, format: uuid }
+
+    ClientProjectView:
+      type: object
+      description: What a client sees. Tasks, equipment and notes are never included.
+      properties:
+        title: { type: string }
+        type: { $ref: '#/components/schemas/ProjectType' }
+        status: { $ref: '#/components/schemas/ProjectStatus' }
+        start_date: { type: string, format: date }
+        end_date: { type: string, format: date }
+        client:
+          type: object
+          properties:
+            name: { type: string }
+            logo_url: { type: string }
+            brand_colors: { $ref: '#/components/schemas/BrandColors' }

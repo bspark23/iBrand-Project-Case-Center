@@ -1,0 +1,15 @@
+# Replace the usernames with real GitHub usernames.
+# The lead reviews everything; module owners are also asked to review their own area.
+
+*                                   @lead-username
+
+/backend/                           @lead-username
+/docs/05-data-model.md              @lead-username
+/docs/06-api-contract.md            @lead-username
+
+/frontend/src/modules/m2-task-board/        @engineer-b
+/frontend/src/modules/m3-equipment/         @engineer-b
+/frontend/src/modules/m4-media/             @engineer-c
+/frontend/src/modules/m5-case-library/      @engineer-c
+/frontend/src/modules/m6-share-links/       @engineer-d
+/frontend/src/modules/m7-client-progress/   @engineer-d
