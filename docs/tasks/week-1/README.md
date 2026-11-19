@@ -1,8 +1,10 @@
 # Week 1 – Build the Projects Page Together
 
+> **Status: built by the lead (@bspark23).** The Projects page, the Clients page and all shared pieces are done and live on `main`. These files are kept as a record of the plan. New tasks for the team will be added separately.
+
 **Team:** Samuel, Tega, Righteous
 **Lead / reviewer:** @bspark23
-**Goal:** By the end of the week, the Projects page works with mock data. You can see all projects, open one, and create or edit one.
+**Goal:** By the end of the week, the Projects page works. You can see all projects, open one, and create or edit one.
 
 ## How the page is shared
 
@@ -27,8 +29,8 @@ The Projects page has 3 parts. Each person owns one part.
 | Person | Task file (read this) | Page | Branch to create |
 |--------|-------------------------|------|------------------|
 | Samuel | [W1-01 Project List](W1-01-samuel-project-list.md) | `/projects` | `samuel/W1-01-project-list` |
-| Tega | [W1-02 Project Detail](W1-02-tega-project-detail.md) | `/projects/:id` | `tega/W1-02-project-detail` |
-| Righteous | [W1-03 Project Form](W1-03-righteous-project-form.md) | `/projects/new` and `/projects/:id/edit` | `righteous/W1-03-project-form` |
+| Tega | [W1-02 Project Detail](W1-02-lead-project-detail.md) | `/projects/:id` | `tega/W1-02-project-detail` |
+| Righteous | [W1-03 Project Form](W1-03-lead-project-form.md) | `/projects/new` and `/projects/:id/edit` | `righteous/W1-03-project-form` |
 
 ## Why you must work together
 

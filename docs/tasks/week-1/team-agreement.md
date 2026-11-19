@@ -7,7 +7,7 @@ Whoever types it pushes it in their PR, and the other two approve it in a commen
 **Present:**
 **Check-in runner (end of week):**
 
-## 1. StatusBadge (owner: Samuel)
+## 1. StatusBadge (built by the lead)
 
 How to use it:
 ```jsx
@@ -21,7 +21,7 @@ How to use it:
 | delivered | | |
 | archived | | |
 
-## 2. labels.js (owner: Righteous)
+## 2. labels.js (built by the lead)
 
 What it exports and how to use it:
 ```js
@@ -30,7 +30,7 @@ import { typeLabel, statusLabel } from '../labels.js';
 typeLabel('brand_film')   // "Brand film"
 ```
 
-## 3. useMockProjects.js (owner: Tega)
+## 3. store.js (built by the lead; replaces useMockProjects.js)
 
 What it returns:
 ```js

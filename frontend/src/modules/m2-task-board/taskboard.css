@@ -1,0 +1,105 @@
+/* ==========================================================
+   M2 Task Board – shared styles set up by the lead.
+   Add styles for YOUR page in your own file:
+     pages/samuel/board.css, pages/tega/task.css, pages/righteous/lists.css
+   and import it at the top of your page. Don't edit this file.
+   ========================================================== */
+
+.task-module { padding-top: 24px; }
+
+.task-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 24px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+}
+.task-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 8px;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.task-nav-link:hover { background: var(--line-soft); color: var(--ink); }
+.task-nav-link.active { background: var(--ink); color: #fff; }
+.task-nav-new { margin-left: auto; }
+
+/* Task status colours */
+.task-status-todo { color: var(--planning); background: var(--planning-bg); }
+.task-status-in_progress { color: var(--active); background: var(--active-bg); }
+.task-status-done { color: var(--delivered); background: var(--delivered-bg); }
+
+/* Due date colours */
+.due-label { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.due-later { color: var(--muted); }
+.due-soon { color: #b45309; }
+.due-today { color: #c2410c; }
+.due-overdue { color: var(--danger); }
+.due-done { color: var(--delivered); }
+
+/* Person avatar (from src/shared/ui/PersonAvatar.jsx) */
+.person-avatar {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 700;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px var(--line);
+}
+.person-avatar-empty { background: var(--line-soft); color: var(--subtle); border-style: dashed; border-color: #cbd5e1; box-shadow: none; }
+
+/* Placeholder until a page is built */
+.task-placeholder { margin-top: 0; }
+.placeholder-list { display: inline-flex; flex-direction: column; gap: 8px; margin: 4px 0 18px; padding: 0; list-style: none; text-align: left; }
+.placeholder-list li { display: flex; align-items: center; gap: 8px; color: var(--text); }
+.placeholder-list .icon { color: var(--subtle); }
+.task-placeholder code { padding: 2px 6px; border-radius: 6px; background: var(--line-soft); font-size: 13px; }
+
+/* Developer test-data panel (only in npm run dev) */
+.dev-panel { position: fixed; right: 20px; bottom: 20px; z-index: 40; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.dev-panel-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  box-shadow: var(--shadow-lg);
+  cursor: pointer;
+}
+.dev-panel-box { display: flex; flex-direction: column; gap: 8px; width: 270px; padding: 16px; box-shadow: var(--shadow-lg); font-size: 14px; }
+.dev-panel-box p { margin: 0; }
+.dev-note { color: var(--delivered); font-weight: 600; }
+
+/* Team page and project Tasks tab (lead) */
+.team-name { display: inline-flex; align-items: center; gap: 10px; }
+.team-actions { text-align: right; white-space: nowrap; }
+.team-table tbody tr { cursor: default; }
+.role-admin { background: var(--brand-soft); color: var(--brand); }
+.role-staff { background: var(--active-bg); color: var(--active); }
+.role-intern { background: var(--published-bg); color: var(--published); }
+
+.tasks-summary-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+.tasks-summary-head h2 { margin-bottom: 4px; }
+.tasks-summary-head p { margin: 0; }
+.progress { height: 8px; margin: 18px 0 4px; border-radius: 999px; background: var(--line-soft); overflow: hidden; }
+.progress span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--delivered), #34d399); transition: width 0.3s; }

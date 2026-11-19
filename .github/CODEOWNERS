@@ -7,7 +7,11 @@
 /docs/05-data-model.md              @lead-username
 /docs/06-api-contract.md            @lead-username
 
-/frontend/src/modules/m2-task-board/        @engineer-b
+/frontend/src/modules/m2-task-board/        @bspark23
+# Week 2 page folders – replace with Samuel's, Tega's and Righteous's GitHub usernames:
+/frontend/src/modules/m2-task-board/pages/samuel/      @samuel-username
+/frontend/src/modules/m2-task-board/pages/tega/        @tega-username
+/frontend/src/modules/m2-task-board/pages/righteous/   @righteous-username
 /frontend/src/modules/m3-equipment/         @engineer-b
 /frontend/src/modules/m4-media/             @engineer-c
 /frontend/src/modules/m5-case-library/      @engineer-c
