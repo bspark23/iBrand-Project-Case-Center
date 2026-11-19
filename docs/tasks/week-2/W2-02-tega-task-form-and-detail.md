@@ -1,112 +1,90 @@
-# W2-02 – Task Form and Task Page (Tega)
+W2-02 - Task Form and Task Page (Tega)
 
-**Owner:** Tega
-**Reviewed by:** Samuel
-**Branch:** `tega/W2-02-task-form-and-detail`
-**Your folder:** `frontend/src/modules/m2-task-board/pages/tega/`
-**Due:** end of Day 5
+Owner: Tega
+Branch: tega/W2-02-task-form-and-detail
+Your folder: frontend/src/modules/m2-task-board/pages/tega/
+Due: end of Day 5
 
-## What you are building
 
-Two pages:
+What you are building
 
-| Page | Address | File |
-|------|---------|------|
-| Task form | `/tasks/new` and `/tasks/<id>/edit` | `TaskFormPage.jsx` |
-| Task page | `/tasks/<id>` | `TaskDetailPage.jsx` |
+You are building two pages. The first is the task form at /tasks/new and /tasks/<id>/edit, in the file TaskFormPage.jsx. The second is the task page at /tasks/<id>, in the file TaskDetailPage.jsx.
 
-The **form** creates a new task, or changes an existing one.
-The **task page** shows one task in full, with buttons to change it.
+The form creates a new task or changes an existing one. The task page shows one task in full, with buttons to change it.
 
-## Tools you can use
 
-All of these are ready. Import them into your page.
+Tools you can use
 
-| What | Where | How |
-|------|-------|-----|
-| One task | `taskStore.js` | `const task = useTask(id)` gives `null` if it doesn't exist |
-| Create | `taskStore.js` | `createTask(values)` returns the new task |
-| Save changes | `taskStore.js` | `updateTask(id, values)` |
-| Change status only | `taskStore.js` | `moveTask(id, 'done')` |
-| Delete | `taskStore.js` | `deleteTask(id)` |
-| Check the form | `taskRules.js` | `validateTask(values, { projects, team })` gives `{ title: 'Task title is required.' }` |
-| Empty form values | `taskRules.js` | `EMPTY_TASK` |
-| Status names | `taskRules.js` | `TASK_STATUSES` |
-| Projects | `m1-projects/store.js` | `useProjects()` |
-| People | `shared/teamStore.js` | `useTeam()` |
-| Status tag | `components/TaskStatusBadge.jsx` | `<TaskStatusBadge status={task.status} />` |
-| Due date tag | `components/DueLabel.jsx` | `<DueLabel task={task} />` |
-| Person's initials | `shared/ui/PersonAvatar.jsx` | `<PersonAvatar person={task.assignee} />` |
-| "Are you sure?" pop-up | `shared/ui/ConfirmDialog.jsx` | see how the Projects page uses it |
+These are already built. Just import them into your page.
 
-Every changing function throws an error with a readable message if something is wrong. Show that message on the page.
+To get one task, use useTask(id) from taskStore.js. It gives null if the task doesn't exist.
+To create a task, use createTask(values). To save changes, use updateTask(id, values).
+To change only the status, use moveTask(id, 'done'). To delete, use deleteTask(id).
+To check the form, use validateTask(values, { projects, team }) from taskRules.js. It tells you which fields are wrong and what message to show.
+For an empty form, use EMPTY_TASK. For the status names, use TASK_STATUSES.
+To get projects, use useProjects(). To get people, use useTeam().
+To show the status, use TaskStatusBadge. For the due date, use DueLabel. For a person's initials, use PersonAvatar.
+For an "Are you sure?" pop-up, use ConfirmDialog. Look at the Projects page to see how it's used.
 
-## Step 1 – Plan it (Day 1)
+If something goes wrong, these functions give an error with a readable message. Show that message on the page.
+
+
+Step 1 - Plan it (Day 1)
 
 Write your answers at the bottom of this file.
 
-- [ ] **Steps:** write what a person does to create a task, and to edit one.
-- [ ] **Drawing:** sketch both pages and add a photo to `docs/tasks/week-2/images/`.
-- [ ] **Form rules:** for each field, write whether it's required and what error message to show.
-- [ ] **Problems:** list at least 6 things that could go wrong. For example, "the task was deleted while I was editing it", "the person was removed from the team", or "I click Cancel after typing".
+Write down, step by step, what a person does to create a task, and what they do to edit one.
+Sketch both pages and add a photo to docs/tasks/week-2/images/.
+For each field, write whether it's required and what error message to show.
+List at least 6 things that could go wrong. For example: the task was deleted while you were editing it, the person was removed from the team, or someone clicks Cancel after typing.
 
-## Step 2 – The form (Day 2–3)
 
-- [ ] Fields: title, project (dropdown), person (dropdown, with an "Unassigned" option), status, and due date.
-- [ ] If the address has `?project=<id>`, pick that project already. The project page's "Add task" button uses this.
-- [ ] On `/tasks/<id>/edit`, fill the fields with that task's details.
-- [ ] Show an error under each wrong field, using `validateTask`.
-- [ ] The page title says "New task" or "Edit task".
-- [ ] Save, then go to the task page.
-- [ ] Cancel: if something was typed, ask "Discard your changes?" first.
-- [ ] If there are no projects, say "Create a project first" with a link.
-- [ ] If the task doesn't exist, show "Task not found".
+Step 2 - The form (Day 2 to 3)
 
-## Step 3 – The task page (Day 3–4)
+The fields are title, project, person, status and due date. The person dropdown needs an "Unassigned" option.
+If the address has ?project=<id>, pick that project already. The project page's "Add task" button uses this.
+On the edit page, fill the fields with the task's details.
+Show an error under each wrong field.
+The page title says "New task" or "Edit task".
+After saving, go to the task page.
+If something was typed and the person clicks Cancel, ask "Discard your changes?" first.
+If there are no projects, say "Create a project first" with a link.
+If the task doesn't exist, show "Task not found".
 
-- [ ] Show the title, status, project (link to `/projects/<id>`), client, person, due date, and when it was created and last changed.
-- [ ] 3 buttons to change the status straight away: To do, In progress, Done. The current one is highlighted.
-- [ ] An "Edit" button that goes to `/tasks/<id>/edit`.
-- [ ] A "Delete" button that asks "Are you sure?" first. After deleting, go back to the project's board (`/tasks/board/<project id>`).
-- [ ] A link "Open the board", to `/tasks/board/<project id>`. (That's Samuel's page, and the link works even before it's built.)
-- [ ] If the task doesn't exist, show "Task not found" with a link to all tasks.
 
-## Step 4 – Finish (Day 5)
+Step 3 - The task page (Day 3 to 4)
 
-- [ ] It looks good on a phone.
-- [ ] Add screenshots to your PR: the empty form, the form showing errors, and the task page.
-- [ ] Review **Righteous's** PR and leave 3 or more comments.
-- [ ] Reply to every comment on your own PR.
-- [ ] Click **Ready for review**.
+Show the title, status, project, client, person and due date, and when the task was created and last changed. The project name links to the project's page.
+Add three buttons that change the status straight away: To do, In progress and Done. Highlight the current one.
+Add an Edit button that goes to the edit page.
+Add a Delete button that asks "Are you sure?" first. After deleting, go back to the project's board.
+Add a link that opens the board at /tasks/board/<project id>. That is Samuel's page, and the link works even before it is built.
+If the task doesn't exist, show "Task not found" with a link to all tasks.
 
-## Done when
 
-- [ ] Every box above is ticked.
-- [ ] You only changed files inside `pages/tega/`.
+Step 4 - Finish (Day 5)
 
----
+Make sure both pages look good on a phone.
+Add screenshots to your pull request: the empty form, the form showing errors, and the task page.
+Reply to every comment on your pull request.
+Click "Ready for review".
 
-## My answers
+You are done when everything above works and you have only changed files inside pages/tega/.
 
-### Steps – create
-1.
 
-### Steps – edit
-1.
+My answers
 
-### Form rules
-| Field | Required? | Error message |
-|-------|-----------|---------------|
-| Title | | |
-| Project | | |
-| Person | | |
-| Status | | |
-| Due date | | |
+Steps to create a task:
 
-### Problems
-| # | What could go wrong | What the page does |
-|---|---------------------|--------------------|
-| 1 | | |
 
-### Notes or questions
--
+Steps to edit a task:
+
+
+Form rules:
+
+
+Things that could go wrong, and what the page does:
+
+
+Notes or questions:
+

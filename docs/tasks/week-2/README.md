@@ -1,111 +1,67 @@
-# Week 2 – Task Board
+Week 2 - Task Board
 
-**Team:** Samuel, Tega, Righteous
-**Lead / reviewer:** @bspark23
-**Deadline:** end of Day 5: ____________ (lead fills in the date)
+Team: Samuel, Tega, Righteous
+Lead: bspark23
+Deadline: end of Day 5 (date: ____________)
 
-## What we are building
 
-The Task Board is where the team keeps track of work on each project.
-A task is one job, like "Book camera crew". Each task has a title, a project, a person, a status (To do, In progress, Done) and a due date.
+What we are building
 
-## Who does what
+The Task Board is where the team keeps track of work on each project. A task is one job, like "Book camera crew". Each task has a title, a project, a person, a status (To do, In progress or Done) and a due date.
 
-The Task Board has 6 pages. Each person builds 2.
 
-| Person | Pages | Task file |
-|--------|-------|-----------|
-| **Samuel** | The board (drag cards between columns) and the board picker | [W2-01](W2-01-samuel-task-board.md) |
-| **Tega** | The task form (create and edit) and the task page | [W2-02](W2-02-tega-task-form-and-detail.md) |
-| **Righteous** | The list of all tasks, and the People page | [W2-03](W2-03-righteous-task-lists.md) |
+Who does what
 
-## You don't need to wait for anyone
+Samuel builds the board, where you drag cards between columns, and the board picker. His task file is W2-01-samuel-task-board.md.
+Tega builds the task form, for creating and editing, and the task page. His task file is W2-02-tega-task-form-and-detail.md.
+Righteous builds the list of all tasks and the People page. His task file is W2-03-righteous-task-lists.md.
 
-The lead has already built everything you share:
-- **The data.** `taskStore.js` saves, reads, moves and deletes tasks. Just call its functions.
-- **The rules.** `taskRules.js` has the status names, the checks for wrong input, and the due-date colours.
-- **Small shared pieces.** These are `TaskStatusBadge`, `DueLabel`, and `PersonAvatar` (a person's initials in a circle).
-- **The routes.** Every page already has its own address and an empty starter file with your name on it.
-- **Test data.** When you run the app with `npm run dev`, a **Test data** button sits at the bottom right of every Task Board page. Click it to add 12 test tasks to **your own browser**. Nobody else sees them.
 
-So you can start on Day 1 and finish without anyone else's work.
+You don't need to wait for anyone
 
-Your pages link to each other with normal links, like a card on Samuel's board linking to `/tasks/<id>` (Tega's page). A link works even before the other page is built. It just shows the "being built" box.
+The lead has already built everything you share: the data, the rules, the small shared pieces and the pages' addresses. Every page already has an empty starter file with your name on it.
 
-## Your files
+To get test tasks, run the app with npm run dev. A "Test data" button sits at the bottom right of the Task Board pages. Click it to add 12 test tasks to your own browser. Nobody else sees them.
 
-Only change files in your own folder. Each folder is yours alone, so you'll never get a merge conflict.
+Your pages link to each other with normal links. A link works even before the other page is built. It just shows a "being built" box.
 
-```
-frontend/src/modules/m2-task-board/
-├── taskStore.js           shared – lead only, don't change
-├── taskRules.js           shared – lead only, don't change
-├── components/            shared – lead only, don't change
-├── index.jsx              routes – lead only, don't change
-└── pages/
-    ├── samuel/            ← Samuel only
-    ├── tega/              ← Tega only
-    └── righteous/         ← Righteous only
-```
+Only change files in your own folder: pages/samuel, pages/tega or pages/righteous. Don't change the shared files. If you think one needs a change, ask the lead.
 
-If you need a new component, put it in **your own folder**. If you think a shared file needs a change, ask the lead in your PR instead of changing it.
 
-## Before you start (once)
+Before you start (once)
 
-1. Get the latest code:
-   ```
-   git checkout main
-   git pull
-   ```
-2. Start the app:
-   ```
-   cd frontend
-   npm install
-   npm run dev
-   ```
-3. Open http://localhost:5173 and set up your test data:
-   - Go to **Clients** and add a client.
-   - Go to **Projects** and create 2 projects.
-   - Go to **Team** and add 3 people.
-   - Go to **Task Board**, click **Test data** (bottom right), and click **Add 12 test tasks**.
+Get the latest code:
+git checkout main
+git pull
 
-## Branches and pull requests
+Start the app:
+cd frontend
+npm install
+npm run dev
 
-Never push to `main`. Make your own branch:
+Open http://localhost:5173. Add a client, create 2 projects, and add 3 people on the Team page. Then open the Task Board, click "Test data" and add the test tasks.
 
-| Person | Branch |
-|--------|--------|
-| Samuel | `samuel/W2-01-task-board` |
-| Tega | `tega/W2-02-task-form-and-detail` |
-| Righteous | `righteous/W2-03-task-lists` |
 
-```
-git checkout -b samuel/W2-01-task-board      (use your own branch name)
+Saving your work
+
+Never push to main. Make your own branch first, using the branch name at the top of your task file:
+git checkout -b samuel/W2-01-task-board
+
+Each time you want to save and share your work:
 git add .
 git commit -m "W2-01: what you did"
 git push -u origin samuel/W2-01-task-board
-```
 
-On your first push, open a **draft pull request** on GitHub. Keep pushing to the same branch. When every box in your task file is ticked, click **Ready for review**.
+The first time you push, open a draft pull request on GitHub. Keep pushing to the same branch. When you're finished, click "Ready for review".
 
-## Working as a team
 
-You build alone, but you still help each other:
-- **Day 3:** post a short update in GitHub Discussions, saying what you finished, what's next, and what's stuck.
-- **Day 5:** review one teammate's PR and leave at least 3 helpful comments. Questions count.
+Working as a team
 
-```
-Samuel reviews Tega · Tega reviews Righteous · Righteous reviews Samuel
-```
+On Day 3, post a short update in GitHub Discussions. Say what you finished, what's next, and what's stuck.
+If you're stuck for more than an hour, ask the team. If you're stuck for half a day, tell the lead.
+If you might miss the deadline, say so at least 2 days before.
 
-- If you're stuck for more than an hour, ask the team. If you're stuck for half a day, tell the lead.
-- If you might miss the deadline, say so in your PR at least 2 days before.
 
-## Using AI
+Using AI
 
-Give the AI:
-1. your task file,
-2. the "How to use" comment at the top of `taskStore.js`,
-3. your page file.
-
-Then ask it to help you build one part at a time. Make sure you understand every line before you commit it. Write in your PR which parts the AI helped with.
+Give the AI your task file, the "How to use" note at the top of taskStore.js, and your page file. Ask it to help you build one part at a time. Make sure you understand what it writes before you save it. In your pull request, say which parts the AI helped with.
