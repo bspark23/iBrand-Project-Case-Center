@@ -8,8 +8,7 @@ Due: end of Day 5
 
 What you are building
 
-You are building two pages. The first is the board picker at /tasks/board, in the file cd /Users/apple/ibrand
-rg --files frontend/src | rg '(m1-projects/store|taskStore|taskRules|PersonAvatar|DueLabel|pages/.*/.*Page|BoardPickerPage)'. The second is the board itself at /tasks/board/<project id>, in the file BoardPage.jsx.
+You are building two pages. The first is the board picker at /tasks/board, in the file BoardPickerPage.jsx. The second is the board itself at /tasks/board/<project id>, in the file BoardPage.jsx.
 
 The board shows one project's tasks in three columns: To do, In progress and Done. You drag a card from one column to another to change its status.
 
